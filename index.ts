@@ -81,8 +81,9 @@ app.post('/auth/refresh',(req,res)=>{
 		return res.status(403).send("Invalid Refresh Token Provided or Refresh Token Expired")
 		else
 		{
-			const accessToken = jwt.sign({},process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-			const accessToken = jwt.sign({},process.env.REQUEST_TOKEN_SECRET, { expiresIn: '15m' });
+			const accessToken = jwt.sign({userId:decoded.id,login:decoded.login},process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800' });
+			const requestToken = jwt.sign({userId:decoded.id,login:decoded.login},process.env.REQUEST_TOKEN_SECRET, { expiresIn: '3600' });
+			return res.status(200).send({accessToken,requestToken});
 		}
 	})
 })
