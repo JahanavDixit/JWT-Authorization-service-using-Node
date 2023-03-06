@@ -47,9 +47,6 @@ app.post('/auth/signup',(req,res)=>{
 	const user = { id: users.length + 1, login, password: password };
 	users.push(user);
 
-	const accessToken  =  jwt.sign(users,process.env.ACCESS_TOKEN_SECRET , { expiresIn: '1800' });
-	const requestToken  =  jwt.sign(users,process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '3600' });
-	
 	res.status(201).send("User Created Sucessfully");
 })
 
@@ -68,8 +65,8 @@ app.post('/auth/login',(req,res)=>{
 		res.status(403).send("No User with this login and password")
 	}
 
-	const accessToken = jwt.sign({ userId: user.id, login: user.login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-	const refreshToken = jwt.sign({ userId: user.id, login: user.login }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+	const accessToken = jwt.sign({ userId: user.id, login: user.login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800' });
+	const refreshToken = jwt.sign({ userId: user.id, login: user.login }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '3600' });
 	return res.status(200).send({ accessToken, refreshToken });
 })
 
@@ -77,10 +74,17 @@ app.post('/auth/refresh',(req,res)=>{
 
 	const {refreshToken} = req.body; 
 
-	if(!refreshToken) return res.send(401).send("No Refresh Token Provided")
+	if(!refreshToken) return res.status(401).send("No Refresh Token Provided")
 
-	
-
+	jwt.verify(refreshToken,process.env.REQUEST_TOKEN_SECRET,(err,decoded)=>{
+		if(err)
+		return res.status(403).send("Invalid Refresh Token Provided or Refresh Token Expired")
+		else
+		{
+			const accessToken = jwt.sign({},process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+			const accessToken = jwt.sign({},process.env.REQUEST_TOKEN_SECRET, { expiresIn: '15m' });
+		}
+	})
 })
 
 app.listen(3000, ()=>{console.log("Sever is running")});
