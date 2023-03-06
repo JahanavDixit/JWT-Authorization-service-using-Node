@@ -9,7 +9,7 @@ require('dotenv').config()
 const app = express()
 app.use(bodyParser.json())
 
-let users = []
+let users:any[] = [];
 
 //Main Code
 const authenticateToken = (req, res, next) => {
@@ -47,7 +47,7 @@ app.post('/auth/signup',(req,res)=>{
 	const user = { id: users.length + 1, login, password: password };
 	users.push(user);
 
-	res.status(201).send("User Created Sucessfully");
+	return res.status(201).send("User Created Sucessfully");
 })
 
 app.post('/auth/login',(req,res)=>{
