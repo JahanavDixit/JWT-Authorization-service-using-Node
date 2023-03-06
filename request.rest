@@ -1,0 +1,6 @@
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "requestToken" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImxvZ2luIjoiamFoYW5hdiIsImlhdCI6MTY3ODEzNTU5MiwiZXhwIjoxNjc4MTM1NTk1fQ.A9dtxLyoVCbVk_YOGt1NNBJKIVQ2uPy8IHV4TQN_n9U"
+}
