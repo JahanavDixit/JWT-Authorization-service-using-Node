@@ -77,6 +77,8 @@ app.post('/auth/refresh',(req,res)=>{
 
 	const {refreshToken} = req.body; 
 
+	if(!refreshToken) return res.send(401).send("No Refresh Token Provided")
+
 	
 
 })
