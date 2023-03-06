@@ -60,7 +60,7 @@ app.post('/auth/login',(req,res)=>{
 	if (!login || !password || typeof login !== 'string' || typeof password !== 'string') {
 		return res.status(400).send('Invalid login or password');
 	  }
-	  
+
 	const user = users.find((u)=>u.login == login)
 
 	if(!user)
@@ -74,6 +74,10 @@ app.post('/auth/login',(req,res)=>{
 })
 
 app.post('/auth/refresh',(req,res)=>{
+
+	const {refreshToken} = req.body; 
+
+	
 
 })
 
