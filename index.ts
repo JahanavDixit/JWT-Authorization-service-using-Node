@@ -1,6 +1,6 @@
 //Configurations && Libraries
 const express = require('express')
-const User = require('./models/user');
+
 const crypt = require('crypto');
 const bodyParser = require('body-parser');
 const originalString = 'password123';
@@ -9,7 +9,7 @@ require('dotenv').config()
 const app = express()
 app.use(bodyParser.json())
 
-let users:any = []
+let users = []
 
 //Main Code
 const authenticateToken = (req, res, next) => {
@@ -62,7 +62,7 @@ app.post('/auth/login',(req,res)=>{
 
 	if(!user)
 	{
-		res.status(403).send("No User with this login and password")
+		return res.status(403).send("No User with this login and password")
 	}
 
 	const accessToken = jwt.sign({ userId: user.id, login: user.login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800' });
