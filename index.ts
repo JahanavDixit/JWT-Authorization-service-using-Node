@@ -11,9 +11,10 @@ app.use(bodyParser.json())
 let users:any[] = [];
 
 //Main Code
+
 const authenticateToken = (req, res, next) => {
 
-	let excludedPaths =  ['/','/doc','/auth/login','/auth/signup']
+	let excludedPaths =  ['/','/doc','/auth/login','/auth/signup'] //excluded path doesnt require authorization header
 
 	if(excludedPaths.includes(req.path)) return next()
 
@@ -33,6 +34,8 @@ const authenticateToken = (req, res, next) => {
 
 app.use(authenticateToken) //Middleware to proxy all routes except the specified routes 
 
+//Sign up route
+
 app.post('/auth/signup',(req,res)=>{
 
 	let { login, password } = req.body;
@@ -48,6 +51,8 @@ app.post('/auth/signup',(req,res)=>{
 
 	return res.status(201).send("User Created Sucessfully");
 })
+
+//Login Route
 
 app.post('/auth/login',(req,res)=>{
 
@@ -69,6 +74,8 @@ app.post('/auth/login',(req,res)=>{
 	return res.status(200).send({ accessToken, refreshToken });
 })
 
+//Refresh Route
+
 app.post('/auth/refresh',(req,res)=>{
 
 	const {refreshToken} = req.body; 
@@ -81,7 +88,9 @@ app.post('/auth/refresh',(req,res)=>{
 		else
 		{
 			const accessToken = jwt.sign({userId:decoded.id,login:decoded.login},process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800' });
+			//new accessToken
 			const requestToken = jwt.sign({userId:decoded.id,login:decoded.login},process.env.REQUEST_TOKEN_SECRET, { expiresIn: '3600' });
+			//new requestToken
 			return res.status(200).send({accessToken,requestToken});
 		}
 	})
