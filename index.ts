@@ -3,7 +3,6 @@ const express = require('express')
 
 const crypt = require('crypto');
 const bodyParser = require('body-parser');
-const originalString = 'password123';
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const app = express()
@@ -19,7 +18,7 @@ const authenticateToken = (req, res, next) => {
 	if(excludedPaths.includes(req.path)) return next()
 
 	const authHeader = req.headers['authorization'];
-	const token = authHeader && authHeader.split(' ')[1];
+	const token = authHeader && authHeader.split(' ')[1]; // check authorization on HTTP header and extract token
 	if (!token) {
 	  return res.status(401).send('Unauthorized');
 	}
@@ -32,7 +31,7 @@ const authenticateToken = (req, res, next) => {
 	});
   };
 
-app.use(authenticateToken)
+app.use(authenticateToken) //Middleware to proxy all routes except the specified routes 
 
 app.post('/auth/signup',(req,res)=>{
 
@@ -40,7 +39,7 @@ app.post('/auth/signup',(req,res)=>{
   if (!login || !password || typeof login !== 'string' || typeof password !== 'string') {
     return res.status(400).send('Provided login or password is invalid');
   }
-	password = crypt.createHash('sha256')
+	password = crypt.createHash('sha256') //Password hashed using sha256
 	.update(password)
 	.digest('hex').toString();
 
